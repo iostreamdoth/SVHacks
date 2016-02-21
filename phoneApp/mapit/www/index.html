@@ -27,6 +27,12 @@
             </nav>
         </head>
 
+        <style>
+        #button{
+           background-color: #01579b ;
+        }
+        </style>
+
     <body>
 
         <script type="text/javascript" charset="utf-8">
@@ -59,11 +65,11 @@
            var button = document.getElementById("button");
             button.addEventListener("click", function() {
 
-              
+
               data = getDataForMap(map);
 
-              
-              
+
+
 
 
 
@@ -132,7 +138,7 @@
                   'message: ' + error.message + '\n');
         }
 
-        
+
             function return2DArray(data)
             {
               //alert("in return2DArray")
@@ -147,8 +153,8 @@
                    var v = [];
                    var googleLocations = [];
                    //alert("its heres2")
-                   v.push(data[i])  
-                   //alert("its heres 3") 
+                   v.push(data[i])
+                   //alert("its heres 3")
                    googleLocations.push(new plugin.google.maps.LatLng(parseFloat(data[i].latitude),parseFloat(data[i].longitude)))
                    //alert("its heres 4")
                    //alert(""+data[i].sessionid);
@@ -160,7 +166,7 @@
                 else
                 {
                 //alert("its heres in else")
-                 array[""+data[i].sessionid].positions.push(data[i]) 
+                 array[""+data[i].sessionid].positions.push(data[i])
                  array[""+data[i].sessionid].googleLocations.push(new plugin.google.maps.LatLng(parseFloat(data[i].latitude),parseFloat(data[i].longitude)))
                 }
               }
@@ -204,7 +210,7 @@
 
                  }
                  map.showDialog();
-                   
+
 
                    },
                    error: function(){
@@ -215,10 +221,10 @@
 
 
         </script>
-        <p id="geolocation">Finding geolocation...</p>
-
-        <button onclick="getDateForMap()">GetDate</button>
-        <button id ="button">GetDate</button>
+        <div>
+            <h5 class = "center-align"><p id="geolocation">Finding geolocation...</p>
+            <button id ="button">GetData</button>
+          </h5>
         <div id="map_canvas"></div>
 
     </body>
