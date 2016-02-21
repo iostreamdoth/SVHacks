@@ -89,13 +89,7 @@
         function onSuccess(position) {
             var element = document.getElementById('geolocation');
             element.innerHTML = 'Latitude: '           + position.coords.latitude              + '<br />' +
-            'Longitude: '          + position.coords.longitude             + '<br />' +
-            'Altitude: '           + position.coords.altitude              + '<br />' +
-            'Accuracy: '           + position.coords.accuracy              + '<br />' +
-            'Altitude Accuracy: '  + position.coords.altitudeAccuracy      + '<br />' +
-            'Heading: '            + position.coords.heading               + '<br />' +
-            'Speed: '              + position.coords.speed                 + '<br />' +
-            'Timestamp: '          +                                   position.timestamp          + '<br />';
+            'Longitude: '          + position.coords.longitude             + '<br />' +;
 
             updateLocation(position)
             //setInterval(callInterval,500)
@@ -223,7 +217,7 @@
         </script>
         <div>
             <h5 class = "center-align"><p id="geolocation">Finding geolocation...</p>
-            <button id ="button">GetData</button>
+            <button id ="button">Get Data</button>
           </h5>
         <div id="map_canvas"></div>
 
