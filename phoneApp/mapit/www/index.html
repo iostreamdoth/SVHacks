@@ -1,49 +1,218 @@
 <!DOCTYPE html>
-<!--
-    Licensed to the Apache Software Foundation (ASF) under one
-    or more contributor license agreements.  See the NOTICE file
-    distributed with this work for additional information
-    regarding copyright ownership.  The ASF licenses this file
-    to you under the Apache License, Version 2.0 (the
-    "License"); you may not use this file except in compliance
-    with the License.  You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing,
-    software distributed under the License is distributed on an
-    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-     KIND, either express or implied.  See the License for the
-    specific language governing permissions and limitations
-    under the License.
--->
 <html>
     <head>
-        <!--
-        Customize this policy to fit your own app's needs. For more guidance, see:
-            https://github.com/apache/cordova-plugin-whitelist/blob/master/README.md#content-security-policy
-        Some notes:
-            * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
-            * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
-            * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
-                * Enable inline JS: add 'unsafe-inline' to default-src
-        -->
-        <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">
-        <meta name="format-detection" content="telephone=no">
-        <meta name="msapplication-tap-highlight" content="no">
-        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
-        <link rel="stylesheet" type="text/css" href="css/index.css">
-        <title>Hello World</title>
-    </head>
+        <title>Device Properties Example</title>
+
+
+        <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+        <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+        <link rel="stylesheet" href="css/materialize.min.css">
+            <nav>
+                <div class=" light-blue darken-4 nav-wrapper">
+                    <a href="#!" class="brand-logo">MapIt</a>
+                    <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons"></i></a>
+                    <ul class="right hide-on-med-and-down">
+                        <li><a href="sass.html">Sass</a></li>
+                        <li><a href="badges.html">Components</a></li>
+                        <li><a href="collapsible.html">Javascript</a></li>
+                        <li><a href="mobile.html">Mobile</a></li>
+                    </ul>
+                    <ul class="side-nav" id="mobile-demo">
+                        <li><a href="sass.html">Sass</a></li>
+                        <li><a href="badges.html">Components</a></li>
+                        <li><a href="collapsible.html">Javascript</a></li>
+                        <li><a href="mobile.html">Mobile</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </head>
+
     <body>
-        <div class="app">
-            <h1>Apache Cordova</h1>
-            <div id="deviceready" class="blink">
-                <p class="event listening">Connecting to Device</p>
-                <p class="event received">Device is Ready</p>
-            </div>
-        </div>
-        <script type="text/javascript" src="cordova.js"></script>
-        <script type="text/javascript" src="js/index.js"></script>
+
+        <script type="text/javascript" charset="utf-8">
+
+            // Wait for Cordova to load
+            //
+            document.addEventListener("deviceready", onDeviceReady, false);
+
+            // Cordova is ready
+            //
+
+            function onDeviceReady() {
+                navigator.geolocation.getCurrentPosition(onSuccess, onError);
+                var mapDiv = document.getElementById("map_canvas");
+
+                // Initialize the map plugin
+                var map = plugin.google.maps.Map.getMap();
+
+                // You have to wait the MAP_READY event.
+                map.on(plugin.google.maps.event.MAP_READY, onMapInit);
+
+
+
+            }
+        function callInterval(){
+            navigator.geolocation.getCurrentPosition(onSuccess2, onError);
+
+        }
+        function onMapInit(map) {
+           var button = document.getElementById("button");
+            button.addEventListener("click", function() {
+
+              
+              data = getDataForMap(map);
+
+              
+              
+
+
+
+
+            }, false);
+            map.addEventListener(plugin.google.maps.event.MAP_CLOSE, function() {
+
+            alert("The map dialog is closed");
+
+          });
+        }
+
+
+
+        // onSuccess Geolocation
+        //
+        function onSuccess(position) {
+            var element = document.getElementById('geolocation');
+            element.innerHTML = 'Latitude: '           + position.coords.latitude              + '<br />' +
+            'Longitude: '          + position.coords.longitude             + '<br />' +
+            'Altitude: '           + position.coords.altitude              + '<br />' +
+            'Accuracy: '           + position.coords.accuracy              + '<br />' +
+            'Altitude Accuracy: '  + position.coords.altitudeAccuracy      + '<br />' +
+            'Heading: '            + position.coords.heading               + '<br />' +
+            'Speed: '              + position.coords.speed                 + '<br />' +
+            'Timestamp: '          +                                   position.timestamp          + '<br />';
+
+            updateLocation(position)
+            //setInterval(callInterval,500)
+
+        }
+
+        function onSuccess2(position) {
+
+            var element = document.getElementById('geolocation');
+            element.innerHTML = 'Latitude: '           + position.coords.latitude              + '<br />' +
+            'Longitude: '          + position.coords.longitude             + '<br />';
+            updateLocation(position)
+        }
+
+        function updateLocation(position)
+        {
+
+            $.ajax({
+                   type: 'POST',
+                   data: {
+                   "userid" : 1,
+                   "location" : position.coords.latitude + " " + position.coords.longitude
+                   },
+                   url: "http://192.168.43.10:5001/update/location",
+                   success: function(data){
+                   console.log(data);
+
+                   },
+                   error: function(){
+                   alert('There was an error adding your comment');
+                   }
+                   });
+
+        }
+
+        // onError Callback receives a PositionError object
+        //
+        function onError(error) {
+            alert('code: '    + error.code    + '\n' +
+                  'message: ' + error.message + '\n');
+        }
+
+        
+            function return2DArray(data)
+            {
+              //alert("in return2DArray")
+              {
+              var array = {};
+              for(var i =0;i<data.length;i++)
+              {
+                //data[i].googleLocation = new plugin.google.maps.LatLng(parseFloat(data[i].latitude),parseFloat(data[i].longitude));
+                if(array[""+data[i].sessionid] == undefined)
+                {
+                   alert("its heres")
+                   var v = [];
+                   var googleLocations = [];
+                   //alert("its heres2")
+                   v.push(data[i])  
+                   //alert("its heres 3") 
+                   googleLocations.push(new plugin.google.maps.LatLng(parseFloat(data[i].latitude),parseFloat(data[i].longitude)))
+                   //alert("its heres 4")
+                   alert(""+data[i].sessionid);
+                   array[""+data[i].sessionid] = {};
+                   array[""+data[i].sessionid].positions = v;
+                   //alert("its heres 5")
+                  array[""+data[i].sessionid].googleLocations = googleLocations;
+                }
+                else
+                {
+                //alert("its heres in else")
+                 array[""+data[i].sessionid].positions.push(data[i]) 
+                 array[""+data[i].sessionid].googleLocations.push(new plugin.google.maps.LatLng(parseFloat(data[i].latitude),parseFloat(data[i].longitude)))
+                }
+              }
+              //alert("outside return2DArray")
+              }
+
+              return array;
+            }
+
+            function getDataForMap(map)
+            {
+               $.ajax({
+                   type: 'GET',
+                   url: "http://192.168.43.10:5001/location",
+                   success: function(data){
+                   console.log(data);
+                   alert(data.message.length)
+                   obj = return2DArray(data.message);
+
+                   alert("array return2DArray")
+
+                   for (var prop in obj) { // enumerate its property names
+
+                     // prop is "Title", "Description" etc
+                     alert(prop);
+                     alert(obj[""+prop].length) // is the respective value
+                     alert(obj[""+prop].googleLocations.length)
+                     map.addPolyline({
+                      points: obj[""+prop].googleLocations,
+                      'color' : '#AA00FF',
+                      'width': 2,
+                      'geodesic': true
+                    });
+
+                 }
+                 map.showDialog();
+                   
+
+                   },
+                   error: function(){
+                   alert('There was an error adding your comment');
+                   }
+                   });
+            }
+
+
+        </script>
+        <p id="geolocation">Finding geolocation...</p>
+
+        <button onclick="getDateForMap()">GetDate</button>
+        <button id ="button">GetDate</button>
+        <div id="map_canvas"></div>
+
     </body>
 </html>
